@@ -7,7 +7,6 @@ include 'EmailMicroService'
 include 'OrderMicroservice'
 include 'CartMicroservice'
 include 'ProductMicroservice'
-include 'ProductMicroservice:ItemMicroservice'
-findProject(':ProductMicroservice:ItemMicroservice')?.name = 'ItemMicroservice'
 include 'ItemMicroservice'
+include 'ConfigServer'
 
