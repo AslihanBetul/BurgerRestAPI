@@ -7,7 +7,6 @@ services:
     environment:
       POSTGRES_USER: java14user
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: SocialMediaAuthDB
     ports:
       - "5433:5432"
 
