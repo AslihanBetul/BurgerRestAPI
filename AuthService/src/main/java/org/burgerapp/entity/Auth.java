@@ -40,5 +40,7 @@ public class Auth {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     AuthRole role=AuthRole.USER;
+    private Long createAt=System.currentTimeMillis();
+    private Long updateAt;
 
 }
