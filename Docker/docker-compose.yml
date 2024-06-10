@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: BurgerRestAPI-postgres
+    environment:
+      POSTGRES_USER: java14user
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: SocialMediaAuthDB
+    ports:
+      - "5433:5432"
+
+
+  mongoDB:
+    image: mongo:jammy
+    container_name: BurgerRestAPI-mongoDB
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: java14user
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27027:27027"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: BurgerRestAPI-rabbit
+    environment:
+      RABBITMQ_DEFAULT_USER: java14user
+      RABBITMQ_DEFAULT_PASS: root
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+
+  redis:
+    image: redis
+    container_name: BurgerRestAPI-redis
+    ports:
+      - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+  redisinsight:
+    image: redislabs/redisinsight:1.14.0
+    container_name: BurgerRestAPI-redisinsight
+    ports:
+      - "8001:8001"
+
