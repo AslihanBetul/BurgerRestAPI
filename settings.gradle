@@ -1,3 +1,5 @@
 rootProject.name = 'BurgerRestAPI'
 include 'AuthService'
+include 'UserMicroservice'
+include 'ApiGatewayMicroservice'
 
