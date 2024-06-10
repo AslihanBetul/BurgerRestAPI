@@ -5,4 +5,5 @@ include 'ApiGatewayMicroservice'
 include 'AdressMicroservice'
 include 'EmailMicroService'
 include 'OrderMicroservice'
+include 'CartMicroservice'
 
