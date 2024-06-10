@@ -3,4 +3,5 @@ include 'AuthService'
 include 'UserMicroservice'
 include 'ApiGatewayMicroservice'
 include 'AdressMicroservice'
+include 'EmailMicroService'
 
