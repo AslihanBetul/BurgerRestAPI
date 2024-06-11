@@ -6,7 +6,6 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
 @Entity
 @Table(name = "tblCategory")

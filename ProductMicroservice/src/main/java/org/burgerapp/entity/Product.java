@@ -10,7 +10,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
 @Entity
 @Table(name = "tblproduct")
