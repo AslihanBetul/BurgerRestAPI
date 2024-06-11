@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 9050
 
 spring:
   rabbitmq:
@@ -11,17 +11,14 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: 1234
-    url: jdbc:postgresql://localhost:5432/authdb
+    url: jdbc:postgresql://localhost:5432/productdb
   jpa:
     hibernate:
       ddl-auto: update
 
 
 
-authservice:
-  secret:
-    secret-key: ${JAVA_14_SECRET_KEY}
-    issuer: ${JAVA_14_ISSUER}
+
 
 
 
