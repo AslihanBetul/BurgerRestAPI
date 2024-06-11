@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.burgerapp.enums.AuthRole;
-import org.burgerapp.enums.AuthStatus;
+import org.burgerapp.entity.enums.AuthRole;
+import org.burgerapp.entity.enums.AuthStatus;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.util.UUID;
 
@@ -30,17 +32,19 @@ public class Auth {
     @Column(unique = true)
     @Email
     private String email;
-    @Builder.Default
-    private String activationcode= UUID.randomUUID().toString();
+    private String activationCode;
+    private String rePasswordCode;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    AuthStatus status=AuthStatus.PENDING;
+    AuthStatus authStatus=AuthStatus.PENDING;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    AuthRole role=AuthRole.USER;
+    AuthRole authRole=AuthRole.USER;
+    @Builder.Default
     private Long createAt=System.currentTimeMillis();
+
     private Long updateAt;
 
 }

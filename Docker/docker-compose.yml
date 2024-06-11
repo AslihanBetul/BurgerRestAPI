@@ -1,25 +1,6 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres
-    container_name: BurgerRestAPI-postgres
-    environment:
-      POSTGRES_USER: java14user
-      POSTGRES_PASSWORD: root
-    ports:
-      - "5433:5432"
-
-
-  mongoDB:
-    image: mongo:jammy
-    container_name: BurgerRestAPI-mongoDB
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: java14user
-      MONGO_INITDB_ROOT_PASSWORD: root
-    ports:
-      - "27027:27027"
-
   rabbitmq:
     image: rabbitmq:3-management
     container_name: BurgerRestAPI-rabbit
@@ -42,7 +23,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256m
+          memory: 512m
 
   redisinsight:
     image: redislabs/redisinsight:1.14.0

@@ -1,4 +1,4 @@
-package org.burgerapp.enums;
+package org.burgerapp.entity.enums;
 
 public enum AuthStatus {
     ACTIVE,

@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface AuthRepository extends JpaRepository<Auth,Long> {
 
 
+    boolean existsByUsername(String username);
 }
 
