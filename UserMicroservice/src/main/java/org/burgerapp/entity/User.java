@@ -19,7 +19,8 @@ public class User {
     private Long authId;
     private String username;
     private String email;
-    private UserStatus status;
+    private UserStatus userStatus;
+    @Builder.Default
     private Long createAt=System.currentTimeMillis();
     private Long updateAt;
 }

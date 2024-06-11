@@ -3,13 +3,17 @@ package org.burgerapp.service;
 
 import lombok.RequiredArgsConstructor;
 
+import org.burgerapp.dto.requestDto.AccountActivationRequestDTO;
 import org.burgerapp.dto.requestDto.AuthRegisterDTO;
 import org.burgerapp.entity.Auth;
+import org.burgerapp.entity.enums.AuthStatus;
 import org.burgerapp.exception.AuthServiceException;
+import org.burgerapp.exception.ErrorType;
 import org.burgerapp.mapper.AuthMapper;
 import org.burgerapp.rabitmq.model.AuthActivationModel;
 import org.burgerapp.rabitmq.model.AuthhorizeSaveModel;
 import org.burgerapp.rabitmq.model.UserSaveModel;
+import org.burgerapp.rabitmq.model.UserStatusUpdateModel;
 import org.burgerapp.repository.AuthRepository;
 import org.burgerapp.utility.CodeGenerator;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -73,5 +77,43 @@ public class AuthService {
         if(authRepository.existsByUsername(username)) {
             throw new AuthServiceException(USERNAME_ALREADY_TAKEN);
         }
+    }
+
+    public String verifyAccount(AccountActivationRequestDTO accountActivationRequestDTO) {
+        Auth auth = checkAuthByUsernameAndPassword(accountActivationRequestDTO.getUsername(), accountActivationRequestDTO.getPassword());
+        isAccountActivatable(auth);
+        isActivationCodeBelongToAccount(auth,accountActivationRequestDTO);
+        auth.setAuthStatus(AuthStatus.ACTIVE);
+        authRepository.save(auth);
+
+
+        convertAndSendUserStatusUpdateModel(UserStatusUpdateModel.builder().authId(auth.getId()).build());
+
+        return ACTIVATION_SUCCESFULL;
+    }
+    private void convertAndSendUserStatusUpdateModel(UserStatusUpdateModel userStatusUpdateModel){
+        String keyUserStatusUpdate = "keyUserStatusUpdate";
+        rabbitTemplate.convertAndSend(directExchange, keyUserStatusUpdate,userStatusUpdateModel);
+    }
+    private void isActivationCodeBelongToAccount(Auth auth,AccountActivationRequestDTO accountActivationRequestDTO) {
+        if(!(auth.getActivationCode().equals(accountActivationRequestDTO.getActivationCode()))){
+            throw new AuthServiceException(ACTIVATION_CODE_WRONG);
+        }
+    }
+    private void isAccountActivatable(Auth auth) {
+        if(auth.getAuthStatus().equals(AuthStatus.ACTIVE)) {
+            throw new AuthServiceException(ACCOUNT_ALREADY_ACTIVATED);
+        }
+        if((auth.getAuthStatus().equals(AuthStatus.BANNED))){
+            throw new AuthServiceException(ACCOUNT_IS_BANNED);
+        }
+        if((auth.getAuthStatus().equals(AuthStatus.DELETED))){
+            throw new AuthServiceException(ACCOUNT_IS_DELETED);
+        }
+
+    }
+    private Auth checkAuthByUsernameAndPassword(String username, String password){
+        return authRepository.findOptionalByUsernameAndPassword(username, password)
+                .orElseThrow(() -> new AuthServiceException(USERNAME_OR_PASSWORD_WRONG));
     }
 }

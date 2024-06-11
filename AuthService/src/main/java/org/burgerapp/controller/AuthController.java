@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import  static org.burgerapp.constant.EndPoints.*;
 
+import org.burgerapp.dto.requestDto.AccountActivationRequestDTO;
 import org.burgerapp.dto.requestDto.AuthRegisterDTO;
 import org.burgerapp.service.AuthService;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,10 @@ public class AuthController {
       return ResponseEntity.ok(authService.register(authRegisterDTO));
    }
 
-
+   @PutMapping(VERIFY_ACCOUNT)
+   public ResponseEntity<String> verifyAccount(@RequestBody @Valid AccountActivationRequestDTO accountActivationRequestDTO){
+      return ResponseEntity.ok(authService.verifyAccount(accountActivationRequestDTO));
+   }
 
 
 

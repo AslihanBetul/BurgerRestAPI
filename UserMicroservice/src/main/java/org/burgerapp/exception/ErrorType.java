@@ -30,7 +30,8 @@ public enum ErrorType {
     ACCOUNT_ALREADY_ACTIVATED(5009,"account already activated", HttpStatus.CONFLICT),
     USER_NOT_FOUND(5009,"user not found", HttpStatus.NOT_FOUND),
     USER_SERVICE_UNAVAILABLE(5010,"user service unavailable", HttpStatus.SERVICE_UNAVAILABLE),
-    USER_SERVICE_CAN_NOT_SAVE_USER_PROFILE(5011,"kayıt sırasında sorun oluştu",HttpStatus.SERVICE_UNAVAILABLE);
+    USER_SERVICE_CAN_NOT_SAVE_USER_PROFILE(5011,"kayıt sırasında sorun oluştu",HttpStatus.SERVICE_UNAVAILABLE),
+    USER_SERVICE_UPDATE_STATUS_FAILED(5009,"user service update failed", HttpStatus.SERVICE_UNAVAILABLE);
 
     private Integer code;
     private String message;
