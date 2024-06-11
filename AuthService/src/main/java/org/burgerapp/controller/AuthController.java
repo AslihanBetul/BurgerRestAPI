@@ -7,6 +7,7 @@ import  static org.burgerapp.constant.EndPoints.*;
 
 import org.burgerapp.dto.requestDto.AccountActivationRequestDTO;
 import org.burgerapp.dto.requestDto.AuthRegisterDTO;
+import org.burgerapp.dto.requestDto.LoginRequestDTO;
 import org.burgerapp.service.AuthService;
 import org.springframework.http.ResponseEntity;
 
@@ -29,6 +30,11 @@ public class AuthController {
    @PutMapping(VERIFY_ACCOUNT)
    public ResponseEntity<String> verifyAccount(@RequestBody @Valid AccountActivationRequestDTO accountActivationRequestDTO){
       return ResponseEntity.ok(authService.verifyAccount(accountActivationRequestDTO));
+   }
+
+   @PostMapping(LOGIN)
+   public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO){
+      return ResponseEntity.ok(authService.login(loginRequestDTO));
    }
 
 

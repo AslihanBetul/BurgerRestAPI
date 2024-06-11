@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.burgerapp.dto.requestDto.AccountActivationRequestDTO;
 import org.burgerapp.dto.requestDto.AuthRegisterDTO;
+import org.burgerapp.dto.requestDto.LoginRequestDTO;
 import org.burgerapp.entity.Auth;
 import org.burgerapp.entity.enums.AuthStatus;
 import org.burgerapp.exception.AuthServiceException;
@@ -16,6 +17,7 @@ import org.burgerapp.rabitmq.model.UserSaveModel;
 import org.burgerapp.rabitmq.model.UserStatusUpdateModel;
 import org.burgerapp.repository.AuthRepository;
 import org.burgerapp.utility.CodeGenerator;
+import org.burgerapp.utility.JwtTokenManager;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,7 @@ public class AuthService {
     private final AuthRepository authRepository;
     private final CodeGenerator codeGenerator;
     private final RabbitTemplate rabbitTemplate;
+    private final JwtTokenManager jwtTokenManager;
     private final String directExchange = "directExchange";
 
 
@@ -115,5 +118,13 @@ public class AuthService {
     private Auth checkAuthByUsernameAndPassword(String username, String password){
         return authRepository.findOptionalByUsernameAndPassword(username, password)
                 .orElseThrow(() -> new AuthServiceException(USERNAME_OR_PASSWORD_WRONG));
+    }
+
+    public String login(LoginRequestDTO loginRequestDTO) {
+        Auth auth = authRepository.findOptionalByEmailAndPassword(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()).orElseThrow(() -> new AuthServiceException(USERNAME_OR_PASSWORD_WRONG));
+        if (!auth.getAuthStatus().equals(AuthStatus.ACTIVE)){
+            throw new AuthServiceException(ACCOUNT_IS_NOT_ACTIVE);
+        }
+        return jwtTokenManager.createToken(auth).orElseThrow(() -> new AuthServiceException(TOKEN_CREATION_FAILED));
     }
 }
