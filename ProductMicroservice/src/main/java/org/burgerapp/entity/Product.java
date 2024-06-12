@@ -7,6 +7,7 @@ import org.burgerapp.entity.enums.CookType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -32,5 +33,6 @@ public class Product extends BaseEntity {
     @OneToOne
     private Category category;
 
+    //String id; String ad; Double price; Map<String, Object> ozellikler; List<UrunSecenekler> secenekler;
 
 }
