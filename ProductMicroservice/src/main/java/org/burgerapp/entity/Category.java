@@ -15,5 +15,6 @@ public class Category {
     private Long id;
     private String name;
     @Embedded
-    private BaseEntity baseEntity;
+    @Builder.Default
+    private BaseEntity baseEntity=new BaseEntity();
 }

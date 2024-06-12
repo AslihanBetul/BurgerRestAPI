@@ -22,5 +22,6 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private ItemType type;
     @Embedded
-    private BaseEntity baseEntity;
+    @Builder.Default
+    private BaseEntity baseEntity=new BaseEntity();
 }

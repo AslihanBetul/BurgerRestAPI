@@ -1,8 +1,10 @@
 package org.burgerapp.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.burgerapp.dto.requestDTO.CustomProductRequestDTO;
 import org.burgerapp.dto.requestDTO.ProductSaveDTO;
 import org.burgerapp.dto.responseDTO.ProductResponseDTO;
+import org.burgerapp.dto.responseDTO.ProductResponseDetailedDTO;
 import org.burgerapp.entity.Product;
 import org.burgerapp.service.ProductService;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +26,13 @@ public class ProductController {
     @GetMapping("/findbycategory")
     public ResponseEntity<List<ProductResponseDTO>> findbycategory(@RequestParam Long categoryId) {
         return ResponseEntity.ok(productService.findByCategoryId(categoryId));
+    }
+    @GetMapping("/findbyid")
+    public ResponseEntity<ProductResponseDetailedDTO> findbyid(@RequestParam Long productId) {
+        return ResponseEntity.ok(productService.findById(productId));
+    }
+    @PostMapping("/cuntomproduct")
+    public ResponseEntity<Product> customProduct(@RequestBody CustomProductRequestDTO customProductRequestDTO){ //TODO Token Ekelencek
+        return ResponseEntity.ok(productService.customProduct(customProductRequestDTO));
     }
 }

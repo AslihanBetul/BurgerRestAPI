@@ -16,7 +16,6 @@ import lombok.experimental.SuperBuilder;
 @Data
 @Embeddable
 public class BaseEntity {
-    @Builder.Default
     private Long createAt=System.currentTimeMillis();
     private Long updateAt;
 }

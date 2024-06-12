@@ -35,7 +35,8 @@ public class Product {
     private Category category;
 
     @Embedded
-    private BaseEntity baseEntity;
+    @Builder.Default
+    private BaseEntity baseEntity=new BaseEntity();
     //String id; String ad; Double price; Map<String, Object> ozellikler; List<UrunSecenekler> secenekler;
 
 }

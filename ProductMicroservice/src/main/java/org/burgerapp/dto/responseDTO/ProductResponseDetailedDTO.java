@@ -17,10 +17,20 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Data
-public class ProductResponseDTO {
+public class ProductResponseDetailedDTO {
     private Long id;
     private String name;
     private String description;
     private BigDecimal price;
+    private CookType cookType;
+    private Category category;
+
+    private List<Item> removableItems = new ArrayList<>();
+
+    private List<Item> availableItems = new ArrayList<>();
+
+    private List<Item> drinks = new ArrayList<>();
+
+
 
 }
