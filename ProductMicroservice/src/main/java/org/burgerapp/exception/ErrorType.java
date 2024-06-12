@@ -33,7 +33,9 @@ public enum ErrorType {
     USER_SERVICE_CAN_NOT_SAVE_USER_PROFILE(5011,"kayıt sırasında sorun oluştu",HttpStatus.SERVICE_UNAVAILABLE),
     USER_SERVICE_UPDATE_STATUS_FAILED(5009,"user service update failed", HttpStatus.SERVICE_UNAVAILABLE),
     ITEM_SAVE_FAILED(5009,"iteö save failed", HttpStatus.SERVICE_UNAVAILABLE),
-    NO_ITEM(5009,"iteö save failed", HttpStatus.NOT_FOUND);
+    NO_ITEM(5009,"item save failed", HttpStatus.NOT_FOUND),
+    CATEGORY_NOT_FOUND(5009,"category not found", HttpStatus.NOT_FOUND),
+    ITEM_NOT_FOUND(5009,"item not found", HttpStatus.NOT_FOUND);
 
     private Integer code;
     private String message;

@@ -59,4 +59,7 @@ public class ItemService {
         }
         return itemResponseDTOS;
     }
+    public Item findById(Long id) {
+        return itemRepository.findById(id).orElseThrow(()-> new ItemServiceException(ITEM_NOT_FOUND));
+    }
 }
