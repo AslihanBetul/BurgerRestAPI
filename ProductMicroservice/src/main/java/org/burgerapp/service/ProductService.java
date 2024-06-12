@@ -10,8 +10,10 @@ import org.burgerapp.entity.Item;
 import org.burgerapp.entity.Product;
 import org.burgerapp.exception.ItemServiceException;
 import org.burgerapp.mapper.ProductMapper;
+import org.burgerapp.rabitmq.model.CustomProductModel;
 import org.burgerapp.repository.ProductRepository;
 import org.burgerapp.utility.JwtTokenManager;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -27,6 +29,8 @@ public class ProductService {
     private final ItemService itemService;
     private final CategoryService categoryService;
     private final JwtTokenManager jwtTokenManager;
+    private final RabbitTemplate rabbitTemplate;
+    private final String directExchangeProduct = "directExchangeProduct";
 
 
     public Product save(ProductSaveDTO productSaveDTO) {
@@ -55,34 +59,50 @@ public class ProductService {
         return ProductMapper.INSTANCE.productToProductResponseDetailedDTO(product);
     }
 
-    public Product customProduct(CustomProductRequestDTO customProductRequestDTO) {
+    public CustomProductModel customProduct(CustomProductRequestDTO customProductRequestDTO) {
         Product choosenProduct= productRepository.findById(customProductRequestDTO.getProductId()).orElseThrow(() -> new ItemServiceException(PRODUCT_NOT_FOUND));
 
         List<Item> itemsShouldBeRemovedFromProduct = itemService.findAllByIds(customProductRequestDTO.getRemovableItems());
         choosenProduct.getRemovableItems().removeAll(itemsShouldBeRemovedFromProduct);
 
         List<Item> itemsShouldBeAddProduct = itemService.findAllByIds(customProductRequestDTO.getAvailableItems());
+        choosenProduct.getAvailableItems().clear();
         choosenProduct.getAvailableItems().addAll(itemsShouldBeAddProduct);
 
         choosenProduct.getDrinks().addAll(itemService.findAllByIds(customProductRequestDTO.getDrinks()));
 
         BigDecimal totalPrice = calculateProductPrice(choosenProduct);
         choosenProduct.setPrice(totalPrice);
-        //TODO gelecek token ile autId'den userId istenecek ve tasarımdaki model'a eklenecek
-        return choosenProduct;
+
+        Long authId = jwtTokenManager.getAuthIdFromToken(customProductRequestDTO.getToken()).orElseThrow(() -> new ItemServiceException(INVALID_TOKEN));
+
+        String userId = convertSentAndReceiveUserId(authId);
+
+        CustomProductModel customProductModel = CustomProductModel.builder().userId(userId).product(choosenProduct).build();
+        //TODO CustomProductModel cart'a göndereilecek
+        return customProductModel;
     }
+    private void convertAndSendCustomProductModel(CustomProductModel customProductModel) {
+        String keySendProduct = "keySendProduct";
+        rabbitTemplate.convertAndSend(directExchangeProduct, keySendProduct,customProductModel);
+    }
+    private String convertSentAndReceiveUserId(Long authId){
+        String keyGetUserId = "keyGetUserId";
+        return (String) rabbitTemplate.convertSendAndReceive(directExchangeProduct, keyGetUserId, authId);
+    }
+
     private BigDecimal calculateProductPrice(Product product){
         BigDecimal productPrice = product.getPrice();
 
         if(!product.getAvailableItems().isEmpty()){
-            product.getAvailableItems().forEach(item -> {
-                productPrice.add(item.getPrice());
-            });
+            for (Item item : product.getAvailableItems()) {
+                productPrice = productPrice.add(item.getPrice());
+            }
         }
         if(!product.getDrinks().isEmpty()){
-            product.getDrinks().forEach(item -> {
-                productPrice.add(item.getPrice());
-            });
+            for (Item item : product.getDrinks()) {
+                productPrice = productPrice.add(item.getPrice());
+            }
         }
         return productPrice;
     }

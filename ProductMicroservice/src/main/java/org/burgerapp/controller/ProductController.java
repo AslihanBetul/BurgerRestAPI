@@ -6,6 +6,7 @@ import org.burgerapp.dto.requestDTO.ProductSaveDTO;
 import org.burgerapp.dto.responseDTO.ProductResponseDTO;
 import org.burgerapp.dto.responseDTO.ProductResponseDetailedDTO;
 import org.burgerapp.entity.Product;
+import org.burgerapp.rabitmq.model.CustomProductModel;
 import org.burgerapp.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.findById(productId));
     }
     @PostMapping("/cuntomproduct")
-    public ResponseEntity<Product> customProduct(@RequestBody CustomProductRequestDTO customProductRequestDTO){ //TODO Token Ekelencek
+    public ResponseEntity<CustomProductModel> customProduct(@RequestBody CustomProductRequestDTO customProductRequestDTO){
         return ResponseEntity.ok(productService.customProduct(customProductRequestDTO));
     }
 }

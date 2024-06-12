@@ -40,14 +40,14 @@ public class UserService {
         userStatusupdate(userStatusUpdateModel.getAuthId());
     }
 
-
-
-
-
     private User isUserExist(Long authId){
         return userRepository.findByAuthId(authId).orElseThrow(() -> new UserServiceException(USER_NOT_FOUND));
     }
 
-
+    @RabbitListener(queues = "queueGetUserId")
+    public String receiveAndSendUserId(Long authId) {
+        User user = userRepository.findByAuthId(authId).orElseThrow(() -> new UserServiceException(USER_NOT_FOUND));
+        return user.getId();
+    }
 
 }

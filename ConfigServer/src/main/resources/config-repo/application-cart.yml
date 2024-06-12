@@ -1,0 +1,23 @@
+server:
+  port: 9050
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: java14user
+    password: root
+  data:
+    mongodb:
+      host: localhost
+      port: 27027
+      database: cartdb
+      username: bilge
+      password: bilge!123
+
+
+
+
+
+
+

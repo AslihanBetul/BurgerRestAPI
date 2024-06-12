@@ -17,7 +17,10 @@ spring:
       ddl-auto: update
 
 
-
+authservice:
+  secret:
+    secret-key: ${JAVA_14_SECRET_KEY}
+    issuer: ${JAVA_14_ISSUER}
 
 
 
