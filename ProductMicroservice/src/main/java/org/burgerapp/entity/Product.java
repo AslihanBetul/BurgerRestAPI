@@ -14,6 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 @Table(name = "tblproduct")
 public class Product extends BaseEntity {
     @Id

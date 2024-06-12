@@ -62,4 +62,13 @@ public class ItemService {
     public Item findById(Long id) {
         return itemRepository.findById(id).orElseThrow(()-> new ItemServiceException(ITEM_NOT_FOUND));
     }
+    public List<Item> findAllByIds(List<Long> ids) {
+        List<Item> items = new ArrayList<>();
+        ids.forEach(itemId -> {
+            Item item = itemRepository.findById(itemId).orElseThrow(()-> new ItemServiceException(NO_ITEM));
+            items.add(item);
+        });
+        //TODO hata yönetimi yapılmalı mı?
+        return items;
+    }
 }
