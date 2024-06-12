@@ -1,5 +1,6 @@
 package org.burgerapp.entity;
 
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Table;
@@ -11,9 +12,9 @@ import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Data
-@MappedSuperclass
+@Embeddable
 public class BaseEntity {
     @Builder.Default
     private Long createAt=System.currentTimeMillis();

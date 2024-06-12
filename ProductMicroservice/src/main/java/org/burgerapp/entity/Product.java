@@ -2,6 +2,7 @@ package org.burgerapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.burgerapp.entity.enums.CookType;
 
 import java.math.BigDecimal;
@@ -9,14 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Data
 @Entity
-@Builder
 @Table(name = "tblproduct")
-public class Product extends BaseEntity {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,6 +34,8 @@ public class Product extends BaseEntity {
     @OneToOne
     private Category category;
 
+    @Embedded
+    private BaseEntity baseEntity;
     //String id; String ad; Double price; Map<String, Object> ozellikler; List<UrunSecenekler> secenekler;
 
 }

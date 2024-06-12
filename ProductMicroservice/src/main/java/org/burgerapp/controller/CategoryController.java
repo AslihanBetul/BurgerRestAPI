@@ -14,7 +14,7 @@ import static org.burgerapp.constant.EndPoints.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping("/category")
 public class CategoryController {
     private final CategoryService categoryService;
 

@@ -1,11 +1,13 @@
-package org.burgerapp.dto.requestDTO;
+package org.burgerapp.dto.responseDTO;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.burgerapp.entity.BaseEntity;
 import org.burgerapp.entity.Category;
 import org.burgerapp.entity.Item;
 import org.burgerapp.entity.enums.CookType;
@@ -18,16 +20,21 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Data
-public class ProductSaveDTO {
+public class ProductResponseDTO {
     private String name;
     private String description;
     private BigDecimal price;
     private CookType cookType;
 
 
-    private List<Long> removableItemsIds = new ArrayList<>();
+    private List<Item> removableItems = new ArrayList<>();
 
-    private List<Long> availableItemsIds = new ArrayList<>();
+    private List<Item> availableItems = new ArrayList<>();
 
-    private Long categoryId;
+    private List<Item> drinks = new ArrayList<>();
+
+    private Category category;
+
+
+    private BaseEntity baseEntity;
 }

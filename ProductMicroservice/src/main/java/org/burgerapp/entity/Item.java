@@ -7,14 +7,13 @@ import org.burgerapp.entity.enums.ItemType;
 
 import java.math.BigDecimal;
 
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Data
 @Entity
 @Table(name = "tblItem")
-public class Item extends BaseEntity {
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,4 +21,6 @@ public class Item extends BaseEntity {
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
     private ItemType type;
+    @Embedded
+    private BaseEntity baseEntity;
 }
