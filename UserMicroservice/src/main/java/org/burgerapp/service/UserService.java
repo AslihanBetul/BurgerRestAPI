@@ -78,7 +78,7 @@ public class UserService {
     public String updateBalance(String token, BigDecimal balance) {
         Long authId = jwtTokenManager.getAuthIdFromToken(token).orElseThrow(() -> new UserServiceException(TOKEN_VERIFY_FAILED));
         User user = userRepository.findByAuthId(authId).orElseThrow(() -> new UserServiceException(USER_NOT_FOUND));
-        user.setBalance(balance);
+        user.setBalance(user.getBalance().add(balance));
         userRepository.save(user);
         return "Yükleme Tamamlandı";
     }
