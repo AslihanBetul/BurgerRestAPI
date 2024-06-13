@@ -8,6 +8,8 @@ import org.burgerapp.entity.enums.UserStatus;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.math.BigDecimal;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,6 +21,7 @@ public class User {
     private Long authId;
     private String username;
     private String email;
+    private BigDecimal balance;
     private UserStatus userStatus;
     @Builder.Default
     private Long createAt=System.currentTimeMillis();

@@ -5,12 +5,16 @@ import org.burgerapp.entity.User;
 import org.burgerapp.entity.enums.UserStatus;
 import org.burgerapp.exception.UserServiceException;
 import org.burgerapp.mapper.UserMapper;
+import org.burgerapp.rabitmq.model.UserIdAndBalanceModel;
 import org.burgerapp.rabitmq.model.UserSaveModel;
 import org.burgerapp.rabitmq.model.UserStatusUpdateModel;
 import org.burgerapp.repository.UserRepository;
+import org.burgerapp.utility.JwtTokenManager;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 import static org.burgerapp.exception.ErrorType.*;
 
@@ -19,6 +23,7 @@ import static org.burgerapp.exception.ErrorType.*;
 public class UserService {
     private final UserRepository userRepository;
     private final RabbitTemplate rabbitTemplate;
+    private final JwtTokenManager jwtTokenManager;
     private final String directExchangeUser = "directExchangeUser";
     private final String keySaveCart = "keySaveCart";
 
@@ -58,4 +63,17 @@ public class UserService {
         return user.getId();
     }
 
+    @RabbitListener(queues = "queueUserIdAndBalance")
+    public UserIdAndBalanceModel  receiveAndSendUserIdAndBalance(Long authId) {
+        User user = userRepository.findByAuthId(authId).orElseThrow(() -> new UserServiceException(USER_NOT_FOUND));
+        return UserIdAndBalanceModel.builder().userId(user.getId()).balance(user.getBalance()).build();
+    }
+
+    public String updateBalance(String token, BigDecimal balance) {
+        Long authId = jwtTokenManager.getAuthIdFromToken(token).orElseThrow(() -> new UserServiceException(TOKEN_VERIFY_FAILED));
+        User user = userRepository.findByAuthId(authId).orElseThrow(() -> new UserServiceException(USER_NOT_FOUND));
+        user.setBalance(balance);
+        userRepository.save(user);
+        return "Yükleme Tamamlandı";
+    }
 }
