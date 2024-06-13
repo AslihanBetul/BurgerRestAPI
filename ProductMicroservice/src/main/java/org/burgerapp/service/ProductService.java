@@ -80,6 +80,7 @@ public class ProductService {
 
         CustomProductModel customProductModel = CustomProductModel.builder().userId(userId).product(choosenProduct).build();
         //TODO CustomProductModel cart'a göndereilecek
+        convertAndSendCustomProductModel(customProductModel);
         return customProductModel;
     }
     private void convertAndSendCustomProductModel(CustomProductModel customProductModel) {

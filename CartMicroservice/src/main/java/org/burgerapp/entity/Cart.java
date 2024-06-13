@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -19,6 +20,6 @@ public class Cart {
     @MongoId
     private String id;
     private String userId;
-    private List<Product> products;
+    private List<Product> products=new ArrayList<>();
     private BigDecimal totalPrice;
 }

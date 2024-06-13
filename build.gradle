@@ -24,7 +24,7 @@ allprojects {
 }
 //Kök dizin içerisinde bulunan alt dizinleri kapsar.
 subprojects {
-    group = 'org.ertugrul'
+    group = 'org.burgerapp'
     version = 'v0.0.1'
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
