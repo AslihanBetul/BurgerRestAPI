@@ -1,19 +1,9 @@
-plugins {
-    id 'java'
-}
 
-group = 'org.burgerapp'
-version = 'unspecified'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation libs.springBootDataMongo
+    implementation libs.springCloudClient
+    implementation libs.springBootAMQP
+    implementation libs.jwt
 }
 
-test {
-    useJUnitPlatform()
-}
