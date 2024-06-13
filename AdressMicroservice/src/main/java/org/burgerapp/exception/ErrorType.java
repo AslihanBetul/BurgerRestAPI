@@ -31,7 +31,8 @@ public enum ErrorType {
     USER_NOT_FOUND(5009,"user not found", HttpStatus.NOT_FOUND),
     USER_SERVICE_UNAVAILABLE(5010,"user service unavailable", HttpStatus.SERVICE_UNAVAILABLE),
     USER_SERVICE_CAN_NOT_SAVE_USER_PROFILE(5011,"kayıt sırasında sorun oluştu",HttpStatus.SERVICE_UNAVAILABLE),
-    ACCOUNT_CREATION_FAILED(5011,"Hesabınız oluşturulurken sorun oluştu. Tekrar deneyin",HttpStatus.SERVICE_UNAVAILABLE);
+    ACCOUNT_CREATION_FAILED(5011,"Hesabınız oluşturulurken sorun oluştu. Tekrar deneyin",HttpStatus.SERVICE_UNAVAILABLE),
+    ADRESS_NOT_FOUND(5001,"adres bulunamadı" ,HttpStatus.NOT_FOUND );
 
     private Integer code;
     private String message;

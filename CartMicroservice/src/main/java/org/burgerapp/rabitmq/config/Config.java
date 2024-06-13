@@ -22,6 +22,9 @@ public class Config {
     private final String queueUpdateUserBalance = "queueUpdateUserBalance";
     private final String keyUpdateUserBalance = "keyUpdateUserBalance";
 
+    private final String queueOrderSave = "queueOrderSave";
+    private final String keyOrderSave = "keyOrderSave";
+
 
 
 
@@ -46,6 +49,15 @@ public class Config {
     @Bean
     public Binding bindingUpdateUserBalance(Queue queueUpdateUserBalance, DirectExchange directExchangeCart) {
         return BindingBuilder.bind(queueUpdateUserBalance).to(directExchangeCart).with(keyUpdateUserBalance);
+    }
+
+    @Bean
+    public Queue queueOrderSave() {
+        return new Queue(queueOrderSave);
+    }
+    @Bean
+    public Binding bindingOrderSave(Queue queueOrderSave, DirectExchange directExchangeCart) {
+        return BindingBuilder.bind(queueOrderSave).to(directExchangeCart).with(keyOrderSave);
     }
 
 

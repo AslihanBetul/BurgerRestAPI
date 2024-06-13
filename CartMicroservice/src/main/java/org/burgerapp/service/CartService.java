@@ -6,6 +6,7 @@ import org.burgerapp.entity.Cart;
 import org.burgerapp.entity.Product;
 import org.burgerapp.exception.CartServiceException;
 import org.burgerapp.rabitmq.model.CustomProductModel;
+import org.burgerapp.rabitmq.model.OrderSaveModel;
 import org.burgerapp.rabitmq.model.UserIdAndBalanceModel;
 import org.burgerapp.repository.CartRepository;
 import org.burgerapp.utility.JwtTokenManager;
@@ -25,6 +26,7 @@ public class CartService {
     private final JwtTokenManager jwtTokenManager;
     private final RabbitTemplate rabbitTemplate;
     private final String direcxtExchangeCart = "directExchangeCart";
+    private final String keyOrderSave = "keyOrderSave";
 
 
     public void saveCart(String userId){
@@ -64,13 +66,18 @@ public class CartService {
         if((cart.getTotalPrice().compareTo(userIdAndBalanceModel.getBalance()) <= 0)){
             userIdAndBalanceModel.setBalance(userIdAndBalanceModel.getBalance().subtract(cart.getTotalPrice()));
             converAndSenUserBalance(userIdAndBalanceModel);
-            //TODO Order Nesnesi
+
+            OrderSaveModel orderSaveModel = OrderSaveModel.builder().userId(userIdAndBalanceModel.getUserId()).product(cart.getProducts()).totalPrice(cart.getTotalPrice()).build();
+            convertAndsenOrderSaveModel(orderSaveModel);
             cart.getProducts().clear();
             cart.setTotalPrice(BigDecimal.ZERO);
             cartRepository.save(cart);
             return "Ödeme Onaylandı";
         }
         return "Bakiye Yetersiz";
+    }
+    private void convertAndsenOrderSaveModel(OrderSaveModel orderSaveModel){
+        rabbitTemplate.convertAndSend(direcxtExchangeCart, keyOrderSave,orderSaveModel);
     }
     private void converAndSenUserBalance(UserIdAndBalanceModel userIdAndBalanceModel){
         String keyUpdateUserBalance = "keyUpdateUserBalance";

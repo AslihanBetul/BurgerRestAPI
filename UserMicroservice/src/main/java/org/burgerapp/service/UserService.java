@@ -27,6 +27,7 @@ public class UserService {
     private final String directExchangeUser = "directExchangeUser";
     private final String keySaveCart = "keySaveCart";
 
+
     public void  saveUser(UserSaveModel userSaveModel){
         User savedUser = userRepository.save(UserMapper.INSTANCE.userSaveModelToUser(userSaveModel));
         convertAndSendUserId(savedUser.getId());
@@ -62,6 +63,11 @@ public class UserService {
         User user = userRepository.findByAuthId(authId).orElseThrow(() -> new UserServiceException(USER_NOT_FOUND));
         return user.getId();
     }
+    @RabbitListener(queues = "queueGetUserIdForAdress")
+    public String receiveAndSendUserIdForAdress(Long authId) {
+        User user = userRepository.findByAuthId(authId).orElseThrow(() -> new UserServiceException(USER_NOT_FOUND));
+        return user.getId();
+    }
 
     @RabbitListener(queues = "queueUserIdAndBalance")
     public UserIdAndBalanceModel  receiveAndSendUserIdAndBalance(Long authId) {
@@ -84,6 +90,8 @@ public class UserService {
         user.setBalance(userIdAndBalanceModel.getBalance());
         userRepository.save(user);
     }
+
+
 
 
 }
