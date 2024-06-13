@@ -76,4 +76,14 @@ public class UserService {
         userRepository.save(user);
         return "Yükleme Tamamlandı";
     }
+
+
+    @RabbitListener(queues = "queueUpdateUserBalance")
+    public void convertAndReceiveBalance(UserIdAndBalanceModel userIdAndBalanceModel){
+        User user = userRepository.findById(userIdAndBalanceModel.getUserId()).orElseThrow(() -> new UserServiceException(USER_NOT_FOUND));
+        user.setBalance(userIdAndBalanceModel.getBalance());
+        userRepository.save(user);
+    }
+
+
 }

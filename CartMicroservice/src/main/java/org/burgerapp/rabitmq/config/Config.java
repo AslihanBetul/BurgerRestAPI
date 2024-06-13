@@ -14,8 +14,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Config {
     private final String direcxtExchangeCart = "directExchangeCart";
+
+
     private final String queueUserIdAndBalance = "queueUserIdAndBalance";
     private final String keyUserIdAndBalance = "keyUserIdAndBalance";
+
+    private final String queueUpdateUserBalance = "queueUpdateUserBalance";
+    private final String keyUpdateUserBalance = "keyUpdateUserBalance";
 
 
 
@@ -34,6 +39,14 @@ public class Config {
         return BindingBuilder.bind(queueUserIdAndBalance).to(directExchangeCart).with(keyUserIdAndBalance);
     }
 
+    @Bean
+    public Queue queueUpdateUserBalance() {
+        return new Queue(queueUpdateUserBalance);
+    }
+    @Bean
+    public Binding bindingUpdateUserBalance(Queue queueUpdateUserBalance, DirectExchange directExchangeCart) {
+        return BindingBuilder.bind(queueUpdateUserBalance).to(directExchangeCart).with(keyUpdateUserBalance);
+    }
 
 
     @Bean

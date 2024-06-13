@@ -7,8 +7,6 @@ include 'EmailMicroService'
 include 'OrderMicroservice'
 include 'CartMicroservice'
 include 'ProductMicroservice'
-include 'ItemMicroservice'
 include 'ConfigServer'
 include 'AuthorizeMicroservice'
-include 'CategoryMicroservice'
 

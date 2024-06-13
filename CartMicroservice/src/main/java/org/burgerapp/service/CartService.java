@@ -25,7 +25,6 @@ public class CartService {
     private final JwtTokenManager jwtTokenManager;
     private final RabbitTemplate rabbitTemplate;
     private final String direcxtExchangeCart = "directExchangeCart";
-    private final String keyUserIdAndBalance = "keyUserIdAndBalance";
 
 
     public void saveCart(String userId){
@@ -63,12 +62,22 @@ public class CartService {
         Cart cart = cartRepository.findByUserId(userIdAndBalanceModel.getUserId()).orElseThrow(()->new CartServiceException(CART_NOT_FOUND));
         System.out.println(userIdAndBalanceModel.getBalance());
         if((cart.getTotalPrice().compareTo(userIdAndBalanceModel.getBalance()) <= 0)){
-            //TODO güncel bakiyeyi userservice'e gönder
+            userIdAndBalanceModel.setBalance(userIdAndBalanceModel.getBalance().subtract(cart.getTotalPrice()));
+            converAndSenUserBalance(userIdAndBalanceModel);
+            //TODO Order Nesnesi
+            cart.getProducts().clear();
+            cart.setTotalPrice(BigDecimal.ZERO);
+            cartRepository.save(cart);
             return "Ödeme Onaylandı";
         }
         return "Bakiye Yetersiz";
     }
+    private void converAndSenUserBalance(UserIdAndBalanceModel userIdAndBalanceModel){
+        String keyUpdateUserBalance = "keyUpdateUserBalance";
+        rabbitTemplate.convertAndSend(direcxtExchangeCart, keyUpdateUserBalance, userIdAndBalanceModel);
+    }
     private UserIdAndBalanceModel convertSendAndRecieveUserIdAnBalance(Long authId){
+        String keyUserIdAndBalance = "keyUserIdAndBalance";
         return (UserIdAndBalanceModel) rabbitTemplate.convertSendAndReceive(direcxtExchangeCart, keyUserIdAndBalance, authId);
     }
 
