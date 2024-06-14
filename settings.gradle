@@ -9,4 +9,5 @@ include 'CartMicroservice'
 include 'ProductMicroservice'
 include 'ConfigServer'
 include 'AuthorizeMicroservice'
+include 'ConfigServerGit'
 
